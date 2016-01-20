@@ -12,7 +12,9 @@ else
 
 conn = PG.connect(dbname: "nbaforum")
 end
-#DROP TABLE IF EXISTS users
+
+conn.exec("DROP TABLE IF EXISTS users")
+
 conn.exec("CREATE TABLE users(
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
