@@ -35,7 +35,7 @@ conn.exec("CREATE TABLE topics (
 )"
 )
 
-#DROP TABLE IF EXISTS comments
+conn.exec("DROP TABLE IF EXISTS comments CASCADE")
 conn.exec("CREATE TABLE comments(
   id SERIAL PRIMARY KEY,
   upvotes INTEGER,
@@ -51,9 +51,9 @@ CREATE TABLE sub_comments(
   id SERIAL PRIMARY KEY,
   upvotes INTEGER,
   downvotes INTEGER,
-  user_id INTEGER REFERENCES users id,
-  author VARCHAR REFERENCES users name,
+  user_id INTEGER REFERENCES users,
   topic_id INTEGER REFERENCES topics,
+  comment_id INTEGER REFERENCES comments,
   comment_contents TEXT NOT NULL
   )"
 )
