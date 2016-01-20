@@ -1,7 +1,17 @@
-require "pg"
+require 'pg'
 
+if ENV["RACK_ENV"] == 'production'
+  conn = PG.connect(
+    dbname: ENV["POSTGRES_DB"],
+    host: ENV["POSTGRES_HOST"],
+    password: ENV["POSTGRES_PASS"],
+    user: ENV["POSTGRES_USER"]
+    )
 
-conn = PG.conect({dbname: "forum"})
+else
+
+conn = PG.connect(dbname: "nbaforum")
+end
 #DROP TABLE IF EXISTS users
 conn.exec("CREATE TABLE users(
   id SERIAL PRIMARY KEY,
