@@ -21,7 +21,6 @@ conn.exec("CREATE TABLE users(
   avatar_url VARCHAR(255),
   topics_score INTEGER,
   comments_score INTEGER,
-
   )"
 )
 
