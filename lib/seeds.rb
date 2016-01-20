@@ -40,8 +40,7 @@ conn.exec("CREATE TABLE comments(
   id SERIAL PRIMARY KEY,
   upvotes INTEGER,
   downvotes INTEGER,
-  user_id INTEGER REFERENCES users id,
-  author VARCHAR REFERENCES users name,
+  user_id INTEGER REFERENCES users,
   topic_id INTEGER REFERENCES topics,
   comment_contents TEXT NOT NULL
     )"
