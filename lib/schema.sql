@@ -1,0 +1,43 @@
+#DROP TABLE IF EXISTS users
+CREATE TABLE users(
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQIE NOT NULL,
+  password_digest VARCHAR(60) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  avatar_url VARCHAR(255),
+  topics_score INTEGER,
+  comments_score INTEGER,
+
+  );
+
+#DROP TABLE IF EXISTS topics
+CREATE TABLE topics(
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users,
+  topic_title VARCHAR (100) NOT NULL,
+  topic_contents TEXT NOT NULL
+);
+
+#DROP TABLE IF EXISTS comments
+CREATE TABLE comments(
+  id SERIAL PRIMARY KEY,
+  upvotes INTEGER,
+  downvotes INTEGER,
+  user_id INTEGER REFERENCES users id,
+  author VARCHAR REFERENCES users name,
+  topic_id INTEGER REFERENCES topics,
+  comment_contents TEXT NOT NULL
+    );
+
+CREATE TABLE sub_comments(
+  id SERIAL PRIMARY KEY,
+  upvotes INTEGER,
+  downvotes INTEGER,
+  user_id INTEGER REFERENCES users id,
+  author VARCHAR REFERENCES users name,
+  topic_id INTEGER REFERENCES topics,
+  comment_contents TEXT NOT NULL
+
+
+  )
+
