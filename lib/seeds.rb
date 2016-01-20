@@ -27,7 +27,7 @@ conn.exec("CREATE TABLE users(
 )
 
 #DROP TABLE IF EXISTS topics
-conn.exec("CREATE TABLE topics(
+conn.exec("CREATE TABLE topics CASCADE(
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users,
   topic_title VARCHAR (100) NOT NULL,
