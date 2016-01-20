@@ -15,7 +15,7 @@ end
 #DROP TABLE IF EXISTS users
 conn.exec("CREATE TABLE users(
   id SERIAL PRIMARY KEY,
-  email VARCHAR(255) UNIQIE NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
   password_digest VARCHAR(60) NOT NULL,
   name VARCHAR(255) NOT NULL,
   avatar_url VARCHAR(255),
