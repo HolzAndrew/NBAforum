@@ -6,7 +6,7 @@ if ENV["RACK_ENV"] == 'production'
     host: ENV["POSTGRES_HOST"],
     password: ENV["POSTGRES_PASS"],
     user: ENV["POSTGRES_USER"]
-    )
+  )
 
 else
 
@@ -22,7 +22,7 @@ conn.exec("CREATE TABLE users(
   name VARCHAR(255) NOT NULL,
   avatar_url VARCHAR(255),
   topics_score INTEGER,
-  comments_score INTEGER,
+  comments_score INTEGER
   )"
 )
 
