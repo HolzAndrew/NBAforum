@@ -16,7 +16,8 @@ CREATE TABLE topics (
   user_id INTEGER REFERENCES users,
   topic_title VARCHAR (100) NOT NULL,
   topic_contents TEXT NOT NULL,
-  topics_score INTEGER
+  topics_score INTEGER,
+  num_comments INTEGER
 );
 
 DROP TABLE IF EXISTS comments CASCADE;

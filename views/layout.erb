@@ -88,7 +88,7 @@
             <li role="presentation"><a href="/signup">Sign up</a></li>
             <% else %>
              <li role="presentation">
-                <a class="nav-link disabled" href="#">You are logged in as <%= current_user['email']%></a>
+                <a class="nav-link disabled" href="#">Logged in as <%= "#{current_user['email']}"%></a>
             </li>
             <% end %>
             </ul>

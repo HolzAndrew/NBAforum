@@ -18,16 +18,21 @@
         <p class="lead"></p>
         <p class="lead"><%= "#{@topic['topic_contents']}"%></p>
         <p class="lead">Topic posted by: <%= "#{@author['name']}" %></p>
+        <p class="lead">
+        <button type="button" class="btn btn-primary"><a href= "/upvote/<%="#{@id}"%>">Up Vote</a></button>
+        <button type="button" class="btn btn-danger">Down Vote</button>
+
       </div>
       <div class="row marketing">
-        <div class="col-lg-6">
-        <p><a class="btn btn-lg btn-success" href="/topic/<%="#{@id}"%>/comment" role="button">post a comment</a></p>
-        </div>
         <div class="col-lg-6">
           <h4>Comments:</h4>
           <% @comments.each do |comment| %>
           <p>Comment: <%= "#{comment["comment_contents"]}"%></p>
           <% end %>
+          <h4>Total comments: <%="#{@comment_totals['count']}"%></h4>
+          <p><a class="btn btn-lg btn-success" href="/topic/<%="#{@id}"%>/comment" role="button">post a comment</a></p>
+        </div>
+        <div class="col-lg-6">
           </div>
 
       </div>

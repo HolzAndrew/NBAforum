@@ -28,10 +28,12 @@ conn.exec("CREATE TABLE users(
 
 conn.exec("DROP TABLE IF EXISTS topics CASCADE")
 conn.exec("CREATE TABLE topics (
-  id SERIAL PRIMARY KEY,
+  topics_id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users,
   topic_title VARCHAR (100) NOT NULL,
-  topic_contents TEXT NOT NULL
+  topic_contents TEXT NOT NULL,
+  topic_score INTEGER,
+  num_comments INTEGER default 0
 )"
 )
 

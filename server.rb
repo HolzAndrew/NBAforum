@@ -20,7 +20,7 @@ module Forum
     conn = PG.connect(dbname: "nbaforum")
 
       get "/" do
-        @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
+        @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ORDER BY num_comments DESC")
         erb :index
       end
 
@@ -45,6 +45,8 @@ module Forum
       #else
 
         conn = PG.connect(dbname: "nbaforum")
+        markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
+        new_post = markdown.render(params["new_post"])
       #end  
         userhash = conn.exec_params(
         "INSERT INTO users (name, email) VALUES ($1, $2) returning *",
@@ -54,6 +56,9 @@ module Forum
         "INSERT INTO topics (topic_title, topic_contents, user_id ) VALUES ($1, $2, $3)",
           [title, topic, userhash.first["id"]]
         )
+
+       
+
         @topic_submitted = true
 
         erb :newtopic
@@ -65,6 +70,7 @@ module Forum
         @topic = conn.exec_params("SELECT * from topics WHERE topics_id = #{params['id'].to_i}").first
         @author = conn.exec_params("SELECT name FROM users JOIN topics on users.id = topics.user_id WHERE topics.topics_id = #{params['id'].to_i}").first
         @comments = conn.exec_params("SELECT comment_contents from comments JOIN topics on comments.topic_id = topics_id WHERE topics.topics_id = #{params['id'].to_i}")
+        @comment_totals = conn.exec_params("SELECT COUNT(*) FROM comments where topic_id = #{params['id'].to_i}").first
         erb :topic
       end
 
@@ -86,7 +92,7 @@ module Forum
         @id = params[:id]
         name = params["name"]
         email = params["email"]
-        comment = params["comment"]
+        #comment = params["comment"]
 
         #if ENV["RACK_ENV"] == 'production'
        # conn = PG.connect(
@@ -98,6 +104,8 @@ module Forum
         #else
 
         conn = PG.connect(dbname: "nbaforum")
+        markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
+        comment = markdown.render(params["comment"])
         #end  
         userhash = conn.exec_params(
           "INSERT INTO users (name, email) VALUES ($1, $2) returning *",
@@ -107,8 +115,14 @@ module Forum
           "INSERT INTO comments (comment_contents, user_id, topic_id ) VALUES ($1, $2, $3)",
           [comment, userhash.first["id"], @id]
         )
+        #binding.pry
+        conn.exec_params(
+          "update topics SET num_comments = num_comments + 1 WHERE topics_id = (#{@id})"
+          )
         @comment_submitted = true
-        @vote = conn.exec_params("SELECT upvotes, downvotes from comments")
+        #@vote = conn.exec_params("SELECT upvotes, downvotes from comments")
+        
+        
         erb :comment
       end
 
@@ -147,6 +161,14 @@ module Forum
         erb :loginfail
 
       end
+
+      get "/topic_up/:id"
+      conn = PG.connect(dbname: "nbaforum")
+      conn.exec_params(
+          "update topics SET topic_score = topic_score + 1 WHERE topics_id = (#{@id})"
+          )
+      end
+
     end
   end
 end
