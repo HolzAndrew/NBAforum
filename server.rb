@@ -59,6 +59,8 @@ module Forum
       conn = PG.connect(dbname: "nbaforum")
       @topic = conn.exec_params("SELECT * from topics WHERE topics_id = #{params['id'].to_i}").first
       @author = conn.exec_params("SELECT name FROM users JOIN topics on users.id = topics.user_id WHERE topics.topics_id = #{params['id'].to_i}").first
+      @comments = conn.exec_params("SELECT comment_contents from comments JOIN topics on comments.topic_id = topics_id WHERE topics.topics_id = #{params['id'].to_i}")
+
       erb :topic
   end
 
@@ -109,6 +111,8 @@ module Forum
 
 
       @comment_submitted = true
+
+      @vote = conn.exec_params("SELECT upvotes, downvotes from comments")
 
      erb :comment
 
