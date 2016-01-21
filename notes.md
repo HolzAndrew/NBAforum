@@ -60,3 +60,8 @@ heroku git:remote -a [project_name]
 
          </ul>
         </div>
+
+
+
+         "INSERT INTO users (name, email, password_digest, avatar_url) VAULES ($1, $2, $3, $4)" RETURNING ID,
+            [name, email, password, ]

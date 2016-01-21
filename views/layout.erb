@@ -83,9 +83,14 @@
 
             
             <li role="presentation"><a href="/topics">Topics</a></li>
+            <% if current_user['name'] %>
             <li role="presentation"><a href="/login">Login</a></li>
-            <li role="presentation"><a href="#">Sign up</a></li>
-            
+            <li role="presentation"><a href="/signup">Sign up</a></li>
+            <% else %>
+             <li role="presentation">
+                <a class="nav-link disabled" href="#">You are logged in as <%= current_user['email']%></a>
+            </li>
+            <% end %>
             </ul>
 
         </nav>
