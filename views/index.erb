@@ -10,6 +10,10 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
+    
+  </head>
+  <body>
+    <div class = "container">
      <div class="jumbotron">
         <h1>Welcome to <br>NBA Forum!</h1>
         <p class="lead">NBA Forum is a forum for all NBA fans. Whether you watch every game every night, or haven't watched a game since Michael retired, NBA forum is for you.</p>
@@ -19,15 +23,13 @@
       <div class="row marketing">
         <div class="col-lg-6">
         <% @topics.each do |topic| %>
-          <h4><a href = "/topic/<%="#{topic['id']}"%>"><%="#{topic['topic_title']}"%></a></h4>
+          <h4><a href = "/topic/<%="#{topic['topics_id']}"%>"><%="#{topic['topic_title']}"%></a></h4>
           <p><%= "#{topic['topic_contents']}"%></p>
           <p>Posted by: <%= "#{topic['name']}"%></p>
           <% end %>
         </div>
       </div>
-  </head>
-  <body>
-    
+      </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

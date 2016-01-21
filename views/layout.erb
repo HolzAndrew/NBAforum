@@ -9,10 +9,13 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>NBA</title>
+    <title>NBA Forum</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link href="/css/signin.css" rel="stylesheet">
     <!-- Bootstrap core CSS -->
+
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/bootstrap.min.js"></script>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
@@ -30,25 +33,68 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
+<body>
 
-  <body>
 
     <div class="container">
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="/">Home</a></li>
-            <li role="presentation"><a href="#"></a></li>
+            <li role="presentation" class="active">
+              <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Teams<span class="caret"></span>
+                </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li><a href="#">Atlanta Hawks</a></li>
+            <li><a href="#">Boston Celtics</a></li>
+            <li><a href="#">Brooklyn Nets</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Charlotte Hornets</a></li>
+            <li><a href="#">Chicago Bulls</a></li>
+            <li><a href="#">Cleveland Cavaliers</a></li>
+            <li><a href="#">Dallas Mavericks</a></li>
+            <li><a href="#">Denver Nuggets</a></li>
+            <li><a href="#">Detroit Pistons</a></li>
+            <li><a href="#">Golden State Warriors</a></li>
+            <li><a href="#">Houston Rockets</a></li>
+            <li><a href="#">Indiana Pacers</a></li>
+            <li><a href="#">L.A. Clippers</a></li>
+            <li><a href="#">L.A. Lakers</a></li>
+            <li><a href="#">Memphis Grizzlies</a></li>
+            <li><a href="#">Miami Heat</a></li>
+            <li><a href="#">Milwaukee Bucks</a></li>
+            <li><a href="#">Minnesota Timberwolves</a></li>
+            <li><a href="#">New Orleans Pelicans</a></li>
+            <li><a href="#">New York Knicks</a></li>
+            <li><a href="#">Oklahoma City Thunder</a></li>
+            <li><a href="#">Orlando Magic</a></li>
+            <li><a href="#">Philadelphia 76ers</a></li>
+            <li><a href="#">Phoenix Suns</a></li>
+            <li><a href="#">Portland Trailblazers</a></li>
+            <li><a href="#">Sacramento Kings</a></li>
+            <li><a href="#">San Antonio Spurs</a></li>
+            <li><a href="#">Toronto Raptors</a></li>
+            <li><a href="#">Utah Jazz</a></li>
+            <li><a href="#">Washington Wizards</a></li>
+
+            </ul>
+            </div>
+            </li>
+
+            
             <li role="presentation"><a href="/topics">Topics</a></li>
-            <li role="presentation"><a href="#">About</a></li>
-            <li<a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></li>
-          </ul>
+            <li role="presentation"><a href="/login">Login</a></li>
+            <li role="presentation"><a href="#">Sign up</a></li>
+            
+            </ul>
+
         </nav>
         <h3 class="text-muted"><a href ="/">NBA Forum</a></h3>
       </div>
+     
+
     <%= yield %>
    
-
       <footer class="footer">
         <p>&copy; Andrew Holz, Inc., an SC Johnson Company</p>
       </footer>
@@ -56,7 +102,8 @@
     </div> <!-- /container -->
 
 
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
   </body>
 </html>

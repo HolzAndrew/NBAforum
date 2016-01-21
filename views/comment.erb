@@ -1,0 +1,27 @@
+
+  <% if @comment_submitted %>
+  <div class="jumbotron">
+        <h1>THANK YOU!</h1>
+  
+  <% else %>
+  <div class="jumbotron">
+        <h1>Post new comment</h1>
+  <form class = "comment" action="/topic/<%="#{@id}"%>/comment" method="post">
+    <div class = "input-row">
+    <label for="name">Your name: </label>
+    <input name="name" type="text" />
+    </div>
+    <div class = "input-row">
+    <label for="email">Email Address: </label>
+    <input name="email" type="text" />
+    </div>
+    <div class = "input-row">
+    <label for="comment">Comment: </label>
+    <textarea name="comment"></textarea>
+    </div>
+    <div class = "input-row">
+    <input type="submit" value="Sumbit!" />
+    </div>
+  </form>
+  <% end %>
+</div>

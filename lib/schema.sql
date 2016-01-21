@@ -12,7 +12,7 @@ CREATE TABLE users(
 
 DROP TABLE IF EXISTS topics CASCADE;
 CREATE TABLE topics (
-  id SERIAL PRIMARY KEY,
+  topics_id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users,
   topic_title VARCHAR (100) NOT NULL,
   topic_contents TEXT NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE topics (
 
 DROP TABLE IF EXISTS comments CASCADE;
 CREATE TABLE comments(
-  id SERIAL PRIMARY KEY,
+  comments_id SERIAL PRIMARY KEY,
   upvotes INTEGER,
   downvotes INTEGER,
   user_id INTEGER REFERENCES users,
