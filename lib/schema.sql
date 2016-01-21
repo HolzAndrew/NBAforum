@@ -1,43 +1,46 @@
-#DROP TABLE IF EXISTS users
+
+
+DROP TABLE IF EXISTS users CASCADE;
+
 CREATE TABLE users(
   id SERIAL PRIMARY KEY,
-  email VARCHAR(255) UNIQIE NOT NULL,
-  password_digest VARCHAR(60) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_digest VARCHAR(60),
   name VARCHAR(255) NOT NULL,
-  avatar_url VARCHAR(255),
-  topics_score INTEGER,
-  comments_score INTEGER,
+  avatar_url VARCHAR(255)
+);
 
-  );
-
-#DROP TABLE IF EXISTS topics
-CREATE TABLE topics(
+DROP TABLE IF EXISTS topics CASCADE;
+CREATE TABLE topics (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users,
   topic_title VARCHAR (100) NOT NULL,
-  topic_contents TEXT NOT NULL
+  topic_contents TEXT NOT NULL,
+  topics_score INTEGER
 );
 
-#DROP TABLE IF EXISTS comments
+DROP TABLE IF EXISTS comments CASCADE;
 CREATE TABLE comments(
   id SERIAL PRIMARY KEY,
   upvotes INTEGER,
   downvotes INTEGER,
-  user_id INTEGER REFERENCES users id,
-  author VARCHAR REFERENCES users name,
+  user_id INTEGER REFERENCES users,
   topic_id INTEGER REFERENCES topics,
-  comment_contents TEXT NOT NULL
-    );
+  comment_contents TEXT NOT NULL,
+  comments_score INTEGER
 
+);
+DROP TABLE IF EXISTS sub_comments CASCADE;
 CREATE TABLE sub_comments(
   id SERIAL PRIMARY KEY,
   upvotes INTEGER,
   downvotes INTEGER,
-  user_id INTEGER REFERENCES users id,
-  author VARCHAR REFERENCES users name,
+  user_id INTEGER REFERENCES users,
   topic_id INTEGER REFERENCES topics,
-  comment_contents TEXT NOT NULL
+  comment_id INTEGER REFERENCES comments,
+  sub_comment_contents TEXT NOT NULL
+);
 
 
-  )
+
 

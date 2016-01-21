@@ -5,42 +5,69 @@ require "bcrypt"
 
 module Forum
   class Server < Sinatra::Base
-    
+    conn = PG.connect(dbname: "nbaforum")
+
     get "/" do
+      @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
       erb :index
     end
 
-    get "/post" do
-      erb :newpost
+    get "/newtopic" do
+      erb :newtopic
     end
 
-    #post '/contact' do
-     # name = params["name"]
-      #email = params["email"]
-     # m3essage = params["message"]
+    post '/newtopic' do
+     
+     name = params["name"]
+     email = params["email"]
+     title = params["title"]
+     topic = params["topic"]
 
-      if ENV["RACK_ENV"] == 'production'
-        conn = PG.connect(
-        dbname: ENV["POSTGRES_DB"],
-        host: ENV["POSTGRES_HOST"],
-        password: ENV["POSTGRES_PASS"],
-        user: ENV["POSTGRES_USER"]
-        )
-      else
+      #if ENV["RACK_ENV"] == 'production'
+       # conn = PG.connect(
+        #dbname: ENV["POSTGRES_DB"],
+        #host: ENV["POSTGRES_HOST"],
+        #password: ENV["POSTGRES_PASS"],
+        #user: ENV["POSTGRES_USER"]
+        #)
+      #else
 
-      conn = PG.connect(dbname: "portfolio")
-      end  
+      conn = PG.connect(dbname: "nbaforum")
+      #end  
+
 
   
-      #conn.exec_params(
-      #{}"INSERT INTO contact_data (name, email, message) VALUES ($1, $2, $3)",
-       # [ name, email, message]
-     # )
-    
-      #@contact_submitted = true
+      
+      userhash = conn.exec_params(
+      "INSERT INTO users (name, email) VALUES ($1, $2) returning *",
+        [name, email]
+        )
 
-     #erb :contact
-    #end
+      conn.exec_params(
+      "INSERT INTO topics (topic_title, topic_contents, user_id ) VALUES ($1, $2, $3)",
+        [title, topic, userhash.first["id"]]
+        )
 
+
+      @topic_submitted = true
+
+     erb :newtopic
+    end
+
+    get "/topic/:id" do
+      conn = PG.connect(dbname: "nbaforum")
+      @topic = conn.exec_params("SELECT * from topics WHERE id = #{params['id'].to_i}").first
+      @author = conn.exec_params("SELECT name FROM users JOIN topics on users.id = topics.user_id WHERE topics.id = #{params['id'].to_i}").first
+      erb :topic
   end
+
+  get "/topics" do
+    @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
+    erb :topics
+  end
+
+    
+
+
 end
+  end

@@ -1,1 +1,47 @@
-style.css
+form.new_post{
+  width: 600px;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+form.new_post div.input-row{
+  padding: 6px;
+}
+
+form.new_post div.input-row label{
+  vertical-align: top;
+  font-size: 22px;
+  display: inline-block;
+  width: 400px;
+}
+
+/* nothing happend */
+form.new_post div.input-row input[type=text]{
+  font-size: 12px;
+  width: 440px;
+  height: 30px;
+  padding: 6px;
+  border: 1px solid #bbb;
+}
+
+form.new_post div.input-row textarea {
+  font-size: 22px;
+  padding: 6px;
+  width: 440px;
+  height: 200px;
+  border: 1px solid #bbb;
+
+}
+
+form.new_post div.input-row input[type=submit]{
+  font-size: 15px;
+  border: 1px solid #bbb;
+  margin-left: 126px;
+  background: #DE5A51;
+  padding: 6px 20px;
+  cursor: pointer;
+}
+
+h1.new_post{
+  text-align: center;
+}
