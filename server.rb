@@ -7,17 +7,6 @@ module Forum
   class Server < Sinatra::Base
     enable :sessions
 
-    def current_user
-      db = PG.connect(dbname: "nbaforum")
-      if session["user_id"]
-        @user ||= db.exec_params(<<-SQL, [ session["user_id"] ]).first
-          SELECT * FROM users WHERE id = $1
-        SQL
-      else
-        # THE USER IS NOT LOGGED IN
-        {}
-      end
-    end
     if ENV["RACK_ENV"] == 'production'
         conn = PG.connect(
         dbname: ENV["POSTGRES_DB"],
@@ -25,11 +14,21 @@ module Forum
         password: ENV["POSTGRES_PASS"],
         user: ENV["POSTGRES_USER"]
         )
-      else
+    else
+      conn = PG.connect(dbname: "nbaforum")
+    end  
 
-        conn = PG.connect(dbname: "nbaforum")
-        
+    def current_user
+      # db = PG.connect(dbname: "nbaforum")
+      if session["user_id"]
+        @user ||= conn.exec_params(<<-SQL, [ session["user_id"] ]).first
+          SELECT * FROM users WHERE id = $1
+        SQL
+      else
+        # THE USER IS NOT LOGGED IN
+        {}
       end
+    end
 
       get "/" do
         @user = current_user
@@ -55,18 +54,7 @@ module Forum
         title = params["title"]
         #topic = params["topic"]
 
-      if ENV["RACK_ENV"] == 'production'
-        conn = PG.connect(
-        dbname: ENV["POSTGRES_DB"],
-        host: ENV["POSTGRES_HOST"],
-        password: ENV["POSTGRES_PASS"],
-        user: ENV["POSTGRES_USER"]
-        )
-      else
 
-        conn = PG.connect(dbname: "nbaforum")
-        
-      end  
         markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
         topic = markdown.render(params["topic"])
         #userhash = conn.exec_params(
@@ -85,18 +73,7 @@ module Forum
       get "/topic/:id" do
         @user = current_user
         @id = params[:id]
-        if ENV["RACK_ENV"] == 'production'
-        conn = PG.connect(
-        dbname: ENV["POSTGRES_DB"],
-        host: ENV["POSTGRES_HOST"],
-        password: ENV["POSTGRES_PASS"],
-        user: ENV["POSTGRES_USER"]
-        )
-      else
-
-        conn = PG.connect(dbname: "nbaforum")
-        
-      end
+        # conn = PG.connect(dbname: "nbaforum")
         @topic = conn.exec_params("SELECT * from topics WHERE topics_id = #{params['id'].to_i}").first
         @author = conn.exec_params("SELECT name FROM users JOIN topics on users.id = topics.user_id WHERE topics.topics_id = #{params['id'].to_i}").first
         @comments = conn.exec_params("SELECT comment_contents from comments JOIN topics on comments.topic_id = topics_id WHERE topics.topics_id = #{params['id'].to_i}")
@@ -124,18 +101,18 @@ module Forum
         email = params["email"]
         #comment = params["comment"]
 
-        if ENV["RACK_ENV"] == 'production'
-          conn = PG.connect(
-        dbname: ENV["POSTGRES_DB"],
-        host: ENV["POSTGRES_HOST"],
-        password: ENV["POSTGRES_PASS"],
-        user: ENV["POSTGRES_USER"]
-        )
-        else
+        # if ENV["RACK_ENV"] == 'production'
+        #   conn = PG.connect(
+        # dbname: ENV["POSTGRES_DB"],
+        # host: ENV["POSTGRES_HOST"],
+        # password: ENV["POSTGRES_PASS"],
+        # user: ENV["POSTGRES_USER"]
+        # )
+        # else
 
 
-        conn = PG.connect(dbname: "nbaforum")
-        end
+        # conn = PG.connect(dbname: "nbaforum")
+        # end
         markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
         comment = markdown.render(params["comment"])
         binding.pry
@@ -165,16 +142,16 @@ module Forum
       end
 
       post "/signup" do
-        if ENV["RACK_ENV"] == 'production'
-          conn = PG.connect(
-        dbname: ENV["POSTGRES_DB"],
-        host: ENV["POSTGRES_HOST"],
-        password: ENV["POSTGRES_PASS"],
-        user: ENV["POSTGRES_USER"]
-        )
-        else
-        conn = PG.connect(dbname: "nbaforum")
-        end
+        # if ENV["RACK_ENV"] == 'production'
+        #   conn = PG.connect(
+        # dbname: ENV["POSTGRES_DB"],
+        # host: ENV["POSTGRES_HOST"],
+        # password: ENV["POSTGRES_PASS"],
+        # user: ENV["POSTGRES_USER"]
+        # )
+        # else
+        # conn = PG.connect(dbname: "nbaforum")
+        # end
         password_digest = BCrypt::Password.create(params["password"])
         new_user = conn.exec_params(<<-SQL, [params["name"], params["email"], password_digest, params["avatar"]])
           INSERT INTO users (name, email, password_digest, avatar_url)
@@ -195,18 +172,7 @@ module Forum
       end
 
       post "/login" do
-        if ENV["RACK_ENV"] == 'production'
-        conn = PG.connect(
-        dbname: ENV["POSTGRES_DB"],
-        host: ENV["POSTGRES_HOST"],
-        password: ENV["POSTGRES_PASS"],
-        user: ENV["POSTGRES_USER"]
-        )
-      else
-
-        conn = PG.connect(dbname: "nbaforum")
-        
-      end
+        # conn = PG.connect(dbname: "nbaforum")
         password_input = (params[:password])
         login_user = conn.exec_params("SELECT * FROM users WHERE email = $1", [params[:email]]).first
         
@@ -225,18 +191,7 @@ module Forum
       get "/topic_upvote/:id" do
       @user = current_user
       @id = params[:id]
-      if ENV["RACK_ENV"] == 'production'
-        conn = PG.connect(
-        dbname: ENV["POSTGRES_DB"],
-        host: ENV["POSTGRES_HOST"],
-        password: ENV["POSTGRES_PASS"],
-        user: ENV["POSTGRES_USER"]
-        )
-      else
-
-        conn = PG.connect(dbname: "nbaforum")
-        
-      end
+      # conn = PG.connect(dbname: "nbaforum")
       conn.exec_params(
           "update topics SET topics_score = topics_score + 1 WHERE topics_id = (#{@id})"
           )
@@ -246,18 +201,7 @@ module Forum
       get "/topic_downvote/:id" do
       @user = current_user
       @id = params[:id]
-      if ENV["RACK_ENV"] == 'production'
-        conn = PG.connect(
-        dbname: ENV["POSTGRES_DB"],
-        host: ENV["POSTGRES_HOST"],
-        password: ENV["POSTGRES_PASS"],
-        user: ENV["POSTGRES_USER"]
-        )
-      else
-
-        conn = PG.connect(dbname: "nbaforum")
-        
-      end
+      # conn = PG.connect(dbname: "nbaforum")
       conn.exec_params(
           "update topics SET topics_score = topics_score - 1 WHERE topics_id = (#{@id})"
           )
