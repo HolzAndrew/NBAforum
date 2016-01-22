@@ -51,7 +51,6 @@ CREATE TABLE sub_comments(
   upvotes INTEGER,
   downvotes INTEGER,
   user_id INTEGER REFERENCES users,
-  topic_id INTEGER REFERENCES topics,
   comment_id INTEGER REFERENCES comments,
   sub_comment_contents TEXT NOT NULL
   )"
