@@ -54,7 +54,7 @@ CREATE TABLE sub_comments(
   user_id INTEGER REFERENCES users,
   topic_id INTEGER REFERENCES topics,
   comment_id INTEGER REFERENCES comments,
-  comment_contents TEXT NOT NULL
+  sub_comment_contents TEXT NOT NULL
   )"
 )
 
