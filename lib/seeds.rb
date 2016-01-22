@@ -21,8 +21,6 @@ conn.exec("CREATE TABLE users(
   password_digest VARCHAR(60) NOT NULL,
   name VARCHAR(255) NOT NULL,
   avatar_url VARCHAR(255),
-  topics_score INTEGER,
-  comments_score INTEGER
   )"
 )
 
@@ -32,19 +30,19 @@ conn.exec("CREATE TABLE topics (
   user_id INTEGER REFERENCES users,
   topic_title VARCHAR (100) NOT NULL,
   topic_contents TEXT NOT NULL,
-  topic_score INTEGER,
-  num_comments INTEGER default 0
+  topics_score INTEGER,
+  num_comments INTEGER default 0,
+  team_tag VARCHAR (3)
 )"
 )
 
 conn.exec("DROP TABLE IF EXISTS comments CASCADE")
 conn.exec("CREATE TABLE comments(
   id SERIAL PRIMARY KEY,
-  upvotes INTEGER,
-  downvotes INTEGER,
   user_id INTEGER REFERENCES users,
   topic_id INTEGER REFERENCES topics,
-  comment_contents TEXT NOT NULL
+  comments_score
+  comment_contents TEXT NOT NULL,
     )"
 )
 

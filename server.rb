@@ -22,6 +22,12 @@ module Forum
 
       get "/" do
         @user = current_user
+        #@topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ORDER BY topics_score DESC")
+        erb :welcome
+      end
+
+      get "/home" do
+        @user = current_user
         @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ORDER BY topics_score DESC")
         erb :index
       end
@@ -38,19 +44,20 @@ module Forum
         title = params["title"]
         #topic = params["topic"]
 
-      #if ENV["RACK_ENV"] == 'production'
-       # conn = PG.connect(
-        #dbname: ENV["POSTGRES_DB"],
-        #host: ENV["POSTGRES_HOST"],
-        #password: ENV["POSTGRES_PASS"],
-        #user: ENV["POSTGRES_USER"]
-        #)
-      #else
+      if ENV["RACK_ENV"] == 'production'
+        conn = PG.connect(
+        dbname: ENV["POSTGRES_DB"],
+        host: ENV["POSTGRES_HOST"],
+        password: ENV["POSTGRES_PASS"],
+        user: ENV["POSTGRES_USER"]
+        )
+      else
 
         conn = PG.connect(dbname: "nbaforum")
+        
+      end  
         markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
         topic = markdown.render(params["topic"])
-      #end  
         #userhash = conn.exec_params(
         #{}"INSERT INTO users (name, email) VALUES ($1, $2) returning *",
           #[name, email]
@@ -59,10 +66,6 @@ module Forum
         "INSERT INTO topics (topic_title, topic_contents, user_id ) VALUES ($1, $2, $3)",
           [title, topic, @user["id"]]
         )
-
-
-       
-
         @topic_submitted = true
 
         erb :newtopic
@@ -99,17 +102,18 @@ module Forum
         email = params["email"]
         #comment = params["comment"]
 
-        #if ENV["RACK_ENV"] == 'production'
-       # conn = PG.connect(
-        #dbname: ENV["POSTGRES_DB"],
-        #host: ENV["POSTGRES_HOST"],
-        #password: ENV["POSTGRES_PASS"],
-        #user: ENV["POSTGRES_USER"]
-        #)
-        #else
+        if ENV["RACK_ENV"] == 'production'
+          conn = PG.connect(
+        dbname: ENV["POSTGRES_DB"],
+        host: ENV["POSTGRES_HOST"],
+        password: ENV["POSTGRES_PASS"],
+        user: ENV["POSTGRES_USER"]
+        )
+        else
 
 
         conn = PG.connect(dbname: "nbaforum")
+        end
         markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
         comment = markdown.render(params["comment"])
         binding.pry
@@ -139,7 +143,16 @@ module Forum
       end
 
       post "/signup" do
+        if ENV["RACK_ENV"] == 'production'
+          conn = PG.connect(
+        dbname: ENV["POSTGRES_DB"],
+        host: ENV["POSTGRES_HOST"],
+        password: ENV["POSTGRES_PASS"],
+        user: ENV["POSTGRES_USER"]
+        )
+        else
         conn = PG.connect(dbname: "nbaforum")
+        end
         password_digest = BCrypt::Password.create(params["password"])
         new_user = conn.exec_params(<<-SQL, [params["name"], params["email"], password_digest, params["avatar"]])
           INSERT INTO users (name, email, password_digest, avatar_url)
@@ -196,5 +209,13 @@ module Forum
       redirect back
       end
 
+      get "/logout" do
+         @user = current_user
+         session.clear
+         redirect "/"
+       end
+
     end
   end
+
+

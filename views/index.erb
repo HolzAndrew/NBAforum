@@ -19,14 +19,17 @@
         <p class="lead">NBA Forum is a forum for all NBA fans. Whether you watch every game every night, or haven't watched a game since Michael retired, NBA forum is for you.</p>
         <p><a class="btn btn-lg btn-success" href="/newtopic" role="button">Start a new topic!</a></p>
       </div>
-      <h2>Trending Threads</h2>
-      <div class="row marketing">
-        <div class="col-lg-6">
+      
+      <div class="row row-centered">
+        <div class="col-xs-6 col-centered"></div>
+        <h2>Trending Threads</h2>
         <% @topics.each do |topic| %>
-          <h4><a href = "/topic/<%="#{topic['topics_id']}"%>"><%="#{topic['topic_title']}"%></a></h4>
-          <p>Posted by: <%= "#{topic['name']}"%></p>
-          <p>Number of comments: <%="#{topic['num_comments']}"%>
-          <p>Score: <%="#{topic['topics_score']}" %>
+          <div class = "topic_comment">
+          <p><a href = "/topic/<%="#{topic['topics_id']}"%>"><%="#{topic['topic_title']}".upcase%></a></p>
+          <p>Posted by: <%= "#{topic['name']}".upcase%></p>
+          <p>Number of comments: <%="#{topic['num_comments']}"%></p>
+          <p>Score: <%="#{topic['topics_score']}" %></p>
+          </div>
           <% end %>
         </div>
       </div>

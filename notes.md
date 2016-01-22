@@ -104,3 +104,8 @@ heroku git:remote -a [project_name]
 
 __________________________________________________________
 
+for logout
+  if they click logout
+  session.clear
+
+  ____________________________________

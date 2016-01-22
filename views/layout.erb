@@ -42,6 +42,16 @@
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
+            
+
+            
+            
+            <% if current_user['name'] %>
+            <li role="presentation"><a href="/topics">Topics</a></li>
+            <li role="presentation">
+                <a class="nav-link disabled" href="#">Logged in as <%= "#{current_user['email']}"%></a>
+            </li>
+            <li role="presentation"><a href="/logout">Logout</a></li>
             <li role="presentation" class="active">
               <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Teams<span class="caret"></span>
@@ -82,22 +92,19 @@
             </ul>
             </div>
             </li>
-
-            
-            <li role="presentation"><a href="/topics">Topics</a></li>
-            <% if current_user['name'] %>
-            <li role="presentation">
-                <a class="nav-link disabled" href="#">Logged in as <%= "#{current_user['email']}"%></a>
-            </li>
             <% else %>
             <li role="presentation"><a href="/login">Login</a></li>
             <li role="presentation"><a href="/signup">Sign up</a></li>
              
             <% end %>
             </ul>
-
+    
         </nav>
+        <% if current_user['name'] %>
+        <h3 class="text-muted"><a href ="/home">NBA Forum</a></h3>
+        <% else %>
         <h3 class="text-muted"><a href ="/">NBA Forum</a></h3>
+        <% end %>
       </div>
      
 
