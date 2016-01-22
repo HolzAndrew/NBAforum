@@ -109,3 +109,7 @@ for logout
   session.clear
 
   ____________________________________
+
+
+
+  heroku pg:psql -a nbaforum

@@ -15,14 +15,13 @@ end
 
 conn.exec("DROP TABLE IF EXISTS users CASCADE")
 
-conn.exec("CREATE TABLE users(
+conn.exec("CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
+  email VARCHAR UNIQUE NOT NULL,
   password_digest VARCHAR(60) NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  avatar_url VARCHAR(255),
-  )"
-)
+  name VARCHAR NOT NULL,
+  avatarl_url VARCHAR)
+  ")
 
 conn.exec("DROP TABLE IF EXISTS topics CASCADE")
 conn.exec("CREATE TABLE topics (
@@ -42,7 +41,7 @@ conn.exec("CREATE TABLE comments(
   user_id INTEGER REFERENCES users,
   topic_id INTEGER REFERENCES topics,
   comments_score INTEGER defualt 0,
-  comment_contents TEXT NOT NULL,
+  comment_contents TEXT NOT NULL
     )"
 )
 
