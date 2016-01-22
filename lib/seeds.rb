@@ -44,7 +44,7 @@ conn.exec("CREATE TABLE comments(
   comment_contents TEXT NOT NULL
     )"
 )
-conn.exec("DROP TABLE IF EXISTS comments CASCADE")
+conn.exec("DROP TABLE IF EXISTS sub_comments CASCADE")
 conn.exec("
 CREATE TABLE sub_comments(
   id SERIAL PRIMARY KEY,
