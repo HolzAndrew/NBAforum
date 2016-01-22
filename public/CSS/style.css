@@ -13,7 +13,8 @@
 }
 
 .topic_comment{
-  background-image: url("http://www.psdgraphics.com/file/basketball-floor-texture.jpg");
+  background-color: white;
+  border: 3px solid black;
   margin-top: 15px;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -26,7 +27,7 @@ h1.new_post{
   text-align: center;
 }
 
-/*body{ 
-background-image: url("http://inspiredcases.aydus.com.vhost.zerolag.com/media/catalog/product/cache/1/image/430x573/9df78eab33525d08d6e5fb8d27136e95/0/_/0_1531.png");
+body{ 
+background-image: url("http://www.psdgraphics.com/file/basketball-floor-texture.jpg");
 background-size: cover;
 }
