@@ -20,7 +20,7 @@ conn.exec("CREATE TABLE users (
   email VARCHAR UNIQUE NOT NULL,
   password_digest VARCHAR(60) NOT NULL,
   name VARCHAR NOT NULL,
-  avatarl_url VARCHAR)
+  avatar_url VARCHAR)
   ")
 
 conn.exec("DROP TABLE IF EXISTS topics CASCADE")
