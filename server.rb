@@ -6,10 +6,11 @@ require "bcrypt"
 module Forum
   class Server < Sinatra::Base
     enable :sessions
+
     def current_user
       db = PG.connect(dbname: "nbaforum")
-      if session["name"]
-        @user ||= db.exec_params(<<-SQL, [ session["name"] ]).first
+      if session["user_id"]
+        @user ||= db.exec_params(<<-SQL, [ session["user_id"] ]).first
           SELECT * FROM users WHERE id = $1
         SQL
       else
@@ -20,11 +21,13 @@ module Forum
     conn = PG.connect(dbname: "nbaforum")
 
       get "/" do
-        @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ORDER BY num_comments DESC")
+        @user = current_user
+        @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ORDER BY topics_score DESC")
         erb :index
       end
 
       get "/newtopic" do
+        @user = current_user
         erb :newtopic
       end
 
@@ -33,7 +36,7 @@ module Forum
         name = params["name"]
         email = params["email"]
         title = params["title"]
-        topic = params["topic"]
+        #topic = params["topic"]
 
       #if ENV["RACK_ENV"] == 'production'
        # conn = PG.connect(
@@ -46,7 +49,7 @@ module Forum
 
         conn = PG.connect(dbname: "nbaforum")
         markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
-        new_post = markdown.render(params["new_post"])
+        topic = markdown.render(params["topic"])
       #end  
         userhash = conn.exec_params(
         "INSERT INTO users (name, email) VALUES ($1, $2) returning *",
@@ -57,6 +60,7 @@ module Forum
           [title, topic, userhash.first["id"]]
         )
 
+
        
 
         @topic_submitted = true
@@ -65,6 +69,7 @@ module Forum
       end
 
       get "/topic/:id" do
+        @user = current_user
         @id = params[:id]
         conn = PG.connect(dbname: "nbaforum")
         @topic = conn.exec_params("SELECT * from topics WHERE topics_id = #{params['id'].to_i}").first
@@ -75,15 +80,14 @@ module Forum
       end
 
       get "/topics" do
+        @user = current_user
         @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
         erb :topics
       end
 
-      get "/login" do
-        erb :login
-      end
 
       get "/topic/:id/comment" do
+        @user = current_user
         @id = params[:id]
         erb :comment
       end
@@ -143,6 +147,7 @@ module Forum
 
 
       get "/signupsuccess" do
+        @user = current_user
         erb :signupsuccess
       end
 
@@ -154,20 +159,35 @@ module Forum
         conn = PG.connect(dbname: "nbaforum")
         password_input = (params[:password])
         login_user = conn.exec_params("SELECT * FROM users WHERE email = $1", [params[:email]]).first
-      if BCrypt::Password.new(login_user["password_digest"]) == password_input 
-        @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
-        erb :index
-      else
-        erb :loginfail
+        
+        if login_user
+          if BCrypt::Password.new(login_user["password_digest"]) == password_input 
+             session["user_id"] = login_user["id"].to_i
+            @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
+            erb :index
+          else
+            erb :loginfail
 
+          end
+        end
       end
-    end
 
       get "/topic_upvote/:id" do
+      @user = current_user
       @id = params[:id]
       conn = PG.connect(dbname: "nbaforum")
       conn.exec_params(
           "update topics SET topics_score = topics_score + 1 WHERE topics_id = (#{@id})"
+          )
+      redirect back
+      end
+
+      get "/topic_downvote/:id" do
+      @user = current_user
+      @id = params[:id]
+      conn = PG.connect(dbname: "nbaforum")
+      conn.exec_params(
+          "update topics SET topics_score = topics_score - 1 WHERE topics_id = (#{@id})"
           )
       redirect back
       end

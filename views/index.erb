@@ -24,9 +24,9 @@
         <div class="col-lg-6">
         <% @topics.each do |topic| %>
           <h4><a href = "/topic/<%="#{topic['topics_id']}"%>"><%="#{topic['topic_title']}"%></a></h4>
-          <p><%= "#{topic['topic_contents']}"%></p>
           <p>Posted by: <%= "#{topic['name']}"%></p>
           <p>Number of comments: <%="#{topic['num_comments']}"%>
+          <p>Score: <%="#{topic['topics_score']}" %>
           <% end %>
         </div>
       </div>

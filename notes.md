@@ -65,3 +65,42 @@ heroku git:remote -a [project_name]
 
          "INSERT INTO users (name, email, password_digest, avatar_url) VAULES ($1, $2, $3, $4)" RETURNING ID,
             [name, email, password, ]
+
+
+
+###old new topic form
+
+
+  <% if @topic_submitted %>
+  <div class="jumbotron">
+        <h1>THANK YOU!</h1>
+
+  <% else %>
+  <div class="jumbotron">
+        <h1>Post new topic</h1>
+  <form class = "new_post" action="/newtopic" method="post">
+    <div class = "input-row">
+    <label for="name">Your name: </label>
+    <input name="name" type="text" value="<%= @user['name'] %>"/>    
+    </div>
+    <div class = "input-row">
+    <label for="email">Email Address: </label>
+    <input name="email" type="text" value="<%= @user['email'] %>"/>
+    </div>
+    <div class = "input-row">
+    <label for="title">Title: (100 character limit) </label>
+    <input name="title" type="text" />
+    </div>
+    <div class = "input-row">
+    <label for="topic">Topic: </label>
+    <textarea name="topic"></textarea>
+    </div>
+    <div class = "input-row">
+    <input type="submit" value="Sumbit!" />
+    </div>
+  </form>
+  <% end %>
+</div>
+
+__________________________________________________________
+

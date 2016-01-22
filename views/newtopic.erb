@@ -1,31 +1,29 @@
-
-  <% if @topic_submitted %>
+<% if @comment_submitted %>
   <div class="jumbotron">
         <h1>THANK YOU!</h1>
-
   <% else %>
   <div class="jumbotron">
         <h1>Post new topic</h1>
-  <form class = "new_post" action="/newtopic" method="post">
-    <div class = "input-row">
-    <label for="name">Your name: </label>
-    <input name="name" type="text" />
-    </div>
-    <div class = "input-row">
-    <label for="email">Email Address: </label>
-    <input name="email" type="text" />
-    </div>
-    <div class = "input-row">
-    <label for="title">Title: (100 character limit) </label>
-    <input name="title" type="text" />
-    </div>
-    <div class = "input-row">
-    <label for="topic">Topic: </label>
-    <textarea name="topic"></textarea>
-    </div>
-    <div class = "input-row">
-    <input type="submit" value="Sumbit!" />
-    </div>
-  </form>
-  <% end %>
+<form class ="new_post" actions ="/newtopic" method="post">
+  <fieldset class="form-group">
+    <label for="name">Your Name:</label>
+    <input type="text" class="form-control" name="name" placeholder="Enter name" value="<%= @user['name'] %>">
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="email">Email Address:</label>
+    <input type="text" class="form-control" name="email" placeholder="Enter email" value="<%= @user['email'] %>">
+  </fieldset>
+    <fieldset class="form-group">
+    <label for="email">Title: </label>
+    <input type="text" class="form-control" name="title" placeholder="100 character limit">
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="exampleTextarea">New Topic:</label>
+    <textarea class="form-control" id="topic" name="topic" rows="5"></textarea>
+  </fieldset>
+  
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+ <% end %>
 </div>

@@ -3,7 +3,7 @@
 <% @topics.each do |topic| %>
 
 <div>
-<h3><a href = "/topic/<%="#{topic['id']}"%>"><%="#{topic['topic_title']}"%></a></h3>
+<h3><a href = "/topic/<%="#{topic['topics_id']}"%>"><%="#{topic['topic_title']}"%></a></h3>
 <p><%= "#{topic['topic_contents']}"%></p>
 <p>Posted by: <%= "#{topic['name']}"%>
 </div>
