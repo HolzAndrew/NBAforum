@@ -33,7 +33,7 @@ h1.new_post{
   opacity: 0.6;
 }
 
-.for_background{ 
+body { 
 background-image: url("http://www.psdgraphics.com/file/basketball-floor-texture.jpg");
 background-size: cover;
 }
