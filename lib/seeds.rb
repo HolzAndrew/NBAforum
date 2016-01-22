@@ -30,7 +30,7 @@ conn.exec("CREATE TABLE topics (
   user_id INTEGER REFERENCES users,
   topic_title VARCHAR (100) NOT NULL,
   topic_contents TEXT NOT NULL,
-  topics_score INTEGER,
+  topics_score INTEGER defailt 0,
   num_comments INTEGER default 0,
   team_tag VARCHAR (3)
 )"
@@ -41,7 +41,7 @@ conn.exec("CREATE TABLE comments(
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users,
   topic_id INTEGER REFERENCES topics,
-  comments_score
+  comments_score INTEGER defualt 0,
   comment_contents TEXT NOT NULL,
     )"
 )
