@@ -29,7 +29,7 @@ conn.exec("CREATE TABLE topics (
   user_id INTEGER REFERENCES users,
   topic_title VARCHAR (100) NOT NULL,
   topic_contents TEXT NOT NULL,
-  topics_score INTEGER defailt 0,
+  topics_score INTEGER default 0,
   num_comments INTEGER default 0,
   team_tag VARCHAR (3)
 )"
