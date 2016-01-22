@@ -8,20 +8,20 @@ module Forum
     enable :sessions
 
     if ENV["RACK_ENV"] == 'production'
-        conn = PG.connect(
+        @@conn = PG.connect(
         dbname: ENV["POSTGRES_DB"],
         host: ENV["POSTGRES_HOST"],
         password: ENV["POSTGRES_PASS"],
         user: ENV["POSTGRES_USER"]
         )
     else
-      conn = PG.connect(dbname: "nbaforum")
+      @@conn = PG.connect(dbname: "nbaforum")
     end  
 
     def current_user
       # db = PG.connect(dbname: "nbaforum")
       if session["user_id"]
-        @user ||= conn.exec_params(<<-SQL, [ session["user_id"] ]).first
+        @user ||= @@conn.exec_params(<<-SQL, [ session["user_id"] ]).first
           SELECT * FROM users WHERE id = $1
         SQL
       else
@@ -32,13 +32,13 @@ module Forum
 
       get "/" do
         @user = current_user
-        #@topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ORDER BY topics_score DESC")
+        #@topics = @@conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ORDER BY topics_score DESC")
         erb :welcome
       end
 
       get "/home" do
         @user = current_user
-        @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ORDER BY topics_score DESC")
+        @topics = @@conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ORDER BY topics_score DESC")
         erb :index
       end
 
@@ -57,11 +57,11 @@ module Forum
 
         markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
         topic = markdown.render(params["topic"])
-        #userhash = conn.exec_params(
+        #userhash = @@conn.exec_params(
         #{}"INSERT INTO users (name, email) VALUES ($1, $2) returning *",
           #[name, email]
         #)
-        conn.exec_params(
+        @@conn.exec_params(
         "INSERT INTO topics (topic_title, topic_contents, user_id ) VALUES ($1, $2, $3)",
           [title, topic, @user["id"]]
         )
@@ -74,16 +74,16 @@ module Forum
         @user = current_user
         @id = params[:id]
         # conn = PG.connect(dbname: "nbaforum")
-        @topic = conn.exec_params("SELECT * from topics WHERE topics_id = #{params['id'].to_i}").first
-        @author = conn.exec_params("SELECT name FROM users JOIN topics on users.id = topics.user_id WHERE topics.topics_id = #{params['id'].to_i}").first
-        @comments = conn.exec_params("SELECT comment_contents from comments JOIN topics on comments.topic_id = topics_id WHERE topics.topics_id = #{params['id'].to_i}")
-        @comment_totals = conn.exec_params("SELECT COUNT(*) FROM comments where topic_id = #{params['id'].to_i}").first
+        @topic = @@conn.exec_params("SELECT * from topics WHERE topics_id = #{params['id'].to_i}").first
+        @author = @@conn.exec_params("SELECT name FROM users JOIN topics on users.id = topics.user_id WHERE topics.topics_id = #{params['id'].to_i}").first
+        @comments = @@conn.exec_params("SELECT comment_contents from comments JOIN topics on comments.topic_id = topics_id WHERE topics.topics_id = #{params['id'].to_i}")
+        @comment_totals = @@conn.exec_params("SELECT COUNT(*) FROM comments where topic_id = #{params['id'].to_i}").first
         erb :topic
       end
 
       get "/topics" do
         @user = current_user
-        @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
+        @topics = @@conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
         erb :topics
       end
 
@@ -117,21 +117,21 @@ module Forum
         comment = markdown.render(params["comment"])
         binding.pry
         #end  
-        #userhash = conn.exec_params(
+        #userhash = @@conn.exec_params(
         #  "INSERT INTO users (name, email) VALUES ($1, $2) returning *",
         #  [name, email]
         #)
         
-        conn.exec_params(
+        @@conn.exec_params(
           "INSERT INTO comments (comment_contents, user_id, topic_id ) VALUES ($1, $2, $3)",
           [comment, @user['id'], @id]
         )
         #binding.pry
-        conn.exec_params(
+        @@conn.exec_params(
           "update topics SET num_comments = num_comments + 1 WHERE topics_id = (#{@id})"
           )
         @comment_submitted = true
-        #@vote = conn.exec_params("SELECT upvotes, downvotes from comments")
+        #@vote = @@conn.exec_params("SELECT upvotes, downvotes from comments")
         
         
         erb :comment
@@ -153,7 +153,7 @@ module Forum
         # conn = PG.connect(dbname: "nbaforum")
         # end
         password_digest = BCrypt::Password.create(params["password"])
-        new_user = conn.exec_params(<<-SQL, [params["name"], params["email"], password_digest, params["avatar"]])
+        new_user = @@conn.exec_params(<<-SQL, [params["name"], params["email"], password_digest, params["avatar"]])
           INSERT INTO users (name, email, password_digest, avatar_url)
           VALUES ($1, $2, $3, $4) RETURNING id;
           SQL
@@ -174,12 +174,12 @@ module Forum
       post "/login" do
         # conn = PG.connect(dbname: "nbaforum")
         password_input = (params[:password])
-        login_user = conn.exec_params("SELECT * FROM users WHERE email = $1", [params[:email]]).first
+        login_user = @@conn.exec_params("SELECT * FROM users WHERE email = $1", [params[:email]]).first
         
         if login_user
           if BCrypt::Password.new(login_user["password_digest"]) == password_input 
              session["user_id"] = login_user["id"].to_i
-            @topics = conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
+            @topics = @@conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
             erb :index
           else
             erb :loginfail
@@ -192,7 +192,7 @@ module Forum
       @user = current_user
       @id = params[:id]
       # conn = PG.connect(dbname: "nbaforum")
-      conn.exec_params(
+      @@conn.exec_params(
           "update topics SET topics_score = topics_score + 1 WHERE topics_id = (#{@id})"
           )
       redirect back
@@ -202,7 +202,7 @@ module Forum
       @user = current_user
       @id = params[:id]
       # conn = PG.connect(dbname: "nbaforum")
-      conn.exec_params(
+      @@conn.exec_params(
           "update topics SET topics_score = topics_score - 1 WHERE topics_id = (#{@id})"
           )
       redirect back
