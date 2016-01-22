@@ -173,6 +173,7 @@ module Forum
 
       post "/login" do
         # conn = PG.connect(dbname: "nbaforum")
+        @user = current_user
         password_input = (params[:password])
         login_user = @@conn.exec_params("SELECT * FROM users WHERE email = $1", [params[:email]]).first
         
