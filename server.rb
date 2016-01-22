@@ -161,14 +161,16 @@ module Forum
         erb :loginfail
 
       end
+    end
 
-      get "/topic_up/:id"
+      get "/topic_upvote/:id" do
+      @id = params[:id]
       conn = PG.connect(dbname: "nbaforum")
       conn.exec_params(
-          "update topics SET topic_score = topic_score + 1 WHERE topics_id = (#{@id})"
+          "update topics SET topics_score = topics_score + 1 WHERE topics_id = (#{@id})"
           )
+      redirect back
       end
 
     end
   end
-end

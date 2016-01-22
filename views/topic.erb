@@ -19,7 +19,7 @@
         <p class="lead"><%= "#{@topic['topic_contents']}"%></p>
         <p class="lead">Topic posted by: <%= "#{@author['name']}" %></p>
         <p class="lead">
-        <button type="button" class="btn btn-primary"><a href= "/upvote/<%="#{@id}"%>">Up Vote</a></button>
+        <button type="button" class="btn btn-primary"><a href= "/topic_upvote/<%="#{@id}"%>">Up Vote</a></button>
         <button type="button" class="btn btn-danger">Down Vote</button>
 
       </div>
