@@ -38,7 +38,7 @@ module Forum
 
       get "/home" do
         @user = current_user
-        @topics = @conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ORDER BY topics_score DESC")
+        @topics = @@conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ORDER BY topics_score DESC")
         erb :index
       end
 
