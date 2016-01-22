@@ -18,7 +18,18 @@ module Forum
         {}
       end
     end
-    conn = PG.connect(dbname: "nbaforum")
+    if ENV["RACK_ENV"] == 'production'
+        conn = PG.connect(
+        dbname: ENV["POSTGRES_DB"],
+        host: ENV["POSTGRES_HOST"],
+        password: ENV["POSTGRES_PASS"],
+        user: ENV["POSTGRES_USER"]
+        )
+      else
+
+        conn = PG.connect(dbname: "nbaforum")
+        
+      end
 
       get "/" do
         @user = current_user
@@ -74,7 +85,18 @@ module Forum
       get "/topic/:id" do
         @user = current_user
         @id = params[:id]
+        if ENV["RACK_ENV"] == 'production'
+        conn = PG.connect(
+        dbname: ENV["POSTGRES_DB"],
+        host: ENV["POSTGRES_HOST"],
+        password: ENV["POSTGRES_PASS"],
+        user: ENV["POSTGRES_USER"]
+        )
+      else
+
         conn = PG.connect(dbname: "nbaforum")
+        
+      end
         @topic = conn.exec_params("SELECT * from topics WHERE topics_id = #{params['id'].to_i}").first
         @author = conn.exec_params("SELECT name FROM users JOIN topics on users.id = topics.user_id WHERE topics.topics_id = #{params['id'].to_i}").first
         @comments = conn.exec_params("SELECT comment_contents from comments JOIN topics on comments.topic_id = topics_id WHERE topics.topics_id = #{params['id'].to_i}")
@@ -173,7 +195,18 @@ module Forum
       end
 
       post "/login" do
+        if ENV["RACK_ENV"] == 'production'
+        conn = PG.connect(
+        dbname: ENV["POSTGRES_DB"],
+        host: ENV["POSTGRES_HOST"],
+        password: ENV["POSTGRES_PASS"],
+        user: ENV["POSTGRES_USER"]
+        )
+      else
+
         conn = PG.connect(dbname: "nbaforum")
+        
+      end
         password_input = (params[:password])
         login_user = conn.exec_params("SELECT * FROM users WHERE email = $1", [params[:email]]).first
         
@@ -192,7 +225,18 @@ module Forum
       get "/topic_upvote/:id" do
       @user = current_user
       @id = params[:id]
-      conn = PG.connect(dbname: "nbaforum")
+      if ENV["RACK_ENV"] == 'production'
+        conn = PG.connect(
+        dbname: ENV["POSTGRES_DB"],
+        host: ENV["POSTGRES_HOST"],
+        password: ENV["POSTGRES_PASS"],
+        user: ENV["POSTGRES_USER"]
+        )
+      else
+
+        conn = PG.connect(dbname: "nbaforum")
+        
+      end
       conn.exec_params(
           "update topics SET topics_score = topics_score + 1 WHERE topics_id = (#{@id})"
           )
@@ -202,7 +246,18 @@ module Forum
       get "/topic_downvote/:id" do
       @user = current_user
       @id = params[:id]
-      conn = PG.connect(dbname: "nbaforum")
+      if ENV["RACK_ENV"] == 'production'
+        conn = PG.connect(
+        dbname: ENV["POSTGRES_DB"],
+        host: ENV["POSTGRES_HOST"],
+        password: ENV["POSTGRES_PASS"],
+        user: ENV["POSTGRES_USER"]
+        )
+      else
+
+        conn = PG.connect(dbname: "nbaforum")
+        
+      end
       conn.exec_params(
           "update topics SET topics_score = topics_score - 1 WHERE topics_id = (#{@id})"
           )
