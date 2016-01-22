@@ -32,7 +32,7 @@ module Forum
       end
 
       post '/newtopic' do
-     
+        @user = current_user
         name = params["name"]
         email = params["email"]
         title = params["title"]
@@ -51,13 +51,13 @@ module Forum
         markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
         topic = markdown.render(params["topic"])
       #end  
-        userhash = conn.exec_params(
-        "INSERT INTO users (name, email) VALUES ($1, $2) returning *",
-          [name, email]
-        )
+        #userhash = conn.exec_params(
+        #{}"INSERT INTO users (name, email) VALUES ($1, $2) returning *",
+          #[name, email]
+        #)
         conn.exec_params(
         "INSERT INTO topics (topic_title, topic_contents, user_id ) VALUES ($1, $2, $3)",
-          [title, topic, userhash.first["id"]]
+          [title, topic, @user["id"]]
         )
 
 
@@ -93,6 +93,7 @@ module Forum
       end
 
       post "/topic/:id/comment" do
+        @user = current_user
         @id = params[:id]
         name = params["name"]
         email = params["email"]
@@ -107,17 +108,20 @@ module Forum
         #)
         #else
 
+
         conn = PG.connect(dbname: "nbaforum")
         markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
         comment = markdown.render(params["comment"])
+        binding.pry
         #end  
-        userhash = conn.exec_params(
-          "INSERT INTO users (name, email) VALUES ($1, $2) returning *",
-          [name, email]
-        )
+        #userhash = conn.exec_params(
+        #  "INSERT INTO users (name, email) VALUES ($1, $2) returning *",
+        #  [name, email]
+        #)
+        
         conn.exec_params(
           "INSERT INTO comments (comment_contents, user_id, topic_id ) VALUES ($1, $2, $3)",
-          [comment, userhash.first["id"], @id]
+          [comment, @user['id'], @id]
         )
         #binding.pry
         conn.exec_params(
