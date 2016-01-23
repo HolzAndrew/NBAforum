@@ -91,7 +91,7 @@ module Forum
       get "/topic/:id/comment" do
         @user = current_user
         @id = params[:id]
-        erb :new_comment2
+        erb :comment
       end
 
       post "/topic/:id/comment" do
