@@ -115,7 +115,6 @@ module Forum
         # end
         markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
         comment = markdown.render(params["comment"])
-        binding.pry
         #end  
         #userhash = @@conn.exec_params(
         #  "INSERT INTO users (name, email) VALUES ($1, $2) returning *",
@@ -130,7 +129,7 @@ module Forum
         @@conn.exec_params(
           "update topics SET num_comments = num_comments + 1 WHERE topics_id = (#{@id})"
           )
-        @@comment_submitted = true
+        @comment_submitted = true
         #@vote = @@conn.exec_params("SELECT upvotes, downvotes from comments")
         
         

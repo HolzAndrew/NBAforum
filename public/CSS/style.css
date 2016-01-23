@@ -14,7 +14,7 @@
 
 .topic_comment{
   background-color: white;
-  border: 3px solid black;
+  border: 1px solid black;
   margin-top: 15px;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -29,8 +29,7 @@ li.header_bar {
 
 h1.new_post{
   text-align: center;
-  z-index: 1;
-  opacity: 0.6;
+  
 }
 
 body { 
