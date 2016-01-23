@@ -78,6 +78,8 @@ module Forum
         @author = @@conn.exec_params("SELECT name FROM users JOIN topics on users.id = topics.user_id WHERE topics.topics_id = #{params['id'].to_i}").first
         @comments = @@conn.exec_params("SELECT comment_contents from comments JOIN topics on comments.topic_id = topics_id WHERE topics.topics_id = #{params['id'].to_i}")
         @comment_totals = @@conn.exec_params("SELECT COUNT(*) FROM comments where topic_id = #{params['id'].to_i}").first
+        #@comment_author = @@conn.exec_params("SELECT name FROM users JOIN comments on users.id = comments.user_id WHERE comments.topic_id = #{params['id'].to_i}")
+      
         erb :topic
       end
 
@@ -97,8 +99,6 @@ module Forum
       post "/topic/:id/comment" do
         @user = current_user
         @id = params[:id]
-        name = params["name"]
-        email = params["email"]
         #comment = params["comment"]
 
         # if ENV["RACK_ENV"] == 'production'
@@ -133,7 +133,7 @@ module Forum
         #@vote = @@conn.exec_params("SELECT upvotes, downvotes from comments")
         
         
-        erb :comment
+        erb :topics
       end
 
       get "/signup" do

@@ -2,15 +2,13 @@
   <div class="jumbotron">
         <h1>THANK YOU!</h1>
   <% else %>
-  <div class="jumbotron">
+   <div class="jumbotron">
         <h1>Post new comment</h1>
 <form class ="comments" actions ="/topic/<%="#{@id}"%>/comment" method="post">
-  </fieldset>
   <fieldset class="form-group">
     <label for="exampleTextarea">Comment:</label>
-    <textarea type ="text" name ="comment" class="form-control" rows="5"></textarea>
+    <textarea class="form-control" id="comment" name="comment" rows="5"></textarea>
   </fieldset>
-  
 
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

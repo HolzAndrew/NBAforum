@@ -113,3 +113,10 @@ for logout
 
 
   heroku pg:psql -a nbaforum
+
+
+
+  ___________________
+
+  <% @comment_author.each do |author| %>
+          <p>by: <%= "#{author['name']}" %></p>

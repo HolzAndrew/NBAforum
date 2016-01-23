@@ -1,11 +1,18 @@
+
 <div class="row row-centered">
-        <div class="col-xs-6 col-centered"></div>
+<h1>All Topics</h1>  
+<p><a class="btn btn-lg btn-success" href="/newtopic" role="button">Start a new topic!</a></p>
 
 <% @topics.each do |topic| %>
 
 <div class = "topic_comment">
 <h3><a href = "/topic/<%="#{topic['topics_id']}"%>"><%="#{topic['topic_title']}".capitalize%></a></h3>
 <p><%= "#{topic['topic_contents']}".capitalize%></p>
-<p>Posted by: <%= "#{topic['name']}".upcase%>
+<p>Posted by: <%= "#{topic['name']}".upcase%></p>
 </div>
 <% end %>
+<br>
+
+<p><a class="btn btn-lg btn-success" href="/newtopic" role="button">Start a new topic!</a></p>
+
+</div>

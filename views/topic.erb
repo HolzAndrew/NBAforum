@@ -9,16 +9,18 @@
         <a href= "/topic_downvote/<%="#{@id}"%>"><button type="button" class="btn btn-danger">Down Vote</button></a>
         <h4>Score: <%= "#{@topic['topics_score']}" %>
       </div>
-      <div class="row marketing">
-        <div class="col-lg-6">
-          <h4>Comments:</h4>
-          <% @comments.each do |comment| %>
-          <p>Comment: <%= "#{comment["comment_contents"]}"%></p>
-          <% end %>
+
+      <div class="row row-centered">
           <h4>Total comments: <%="#{@comment_totals['count']}"%></h4>
+          <% @comments.each do |comment| %>
+          <div class = "topic_comment">
+          <p><%= "#{comment["comment_contents"]}"%></p>
+          </div>
+          <% end %>
+
+          
           <p><a class="btn btn-lg btn-success" href="/topic/<%="#{@id}"%>/comment" role="button">post a comment</a></p>
         </div>
-        <div class="col-lg-6">
           </div>
 
 
