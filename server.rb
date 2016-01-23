@@ -88,12 +88,10 @@ module Forum
         @topics = @@conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
         erb :topics
       end
-
-
       get "/topic/:id/comment" do
         @user = current_user
         @id = params[:id]
-        erb :comment
+        erb :new_comment2
       end
 
       post "/topic/:id/comment" do
