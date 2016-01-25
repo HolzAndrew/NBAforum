@@ -91,11 +91,13 @@ module Forum
       get "/topic/:id/comment" do
         @user = current_user
         @id = params[:id]
+        @topics = @@conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
         erb :comment
       end
 
       post "/topic/:id/comment" do
         @user = current_user
+        @topics = @@conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
         @id = params[:id]
         #comment = params["comment"]
 
@@ -129,7 +131,6 @@ module Forum
           )
         @comment_submitted = true
         #@vote = @@conn.exec_params("SELECT upvotes, downvotes from comments")
-        
         
         erb :topics
       end
