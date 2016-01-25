@@ -92,6 +92,7 @@ module Forum
         @user = current_user
         @id = params[:id]
         @topics = @@conn.exec_params("SELECT * from topics JOIN users on users.id = topics.user_id ")
+        @topic = @@conn.exec_params("SELECT * from topics WHERE topics_id = #{params['id'].to_i}").first
         erb :comment
       end
 
