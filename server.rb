@@ -136,8 +136,8 @@ module Forum
           )
         @comment_submitted = true
         #@vote = @@conn.exec_params("SELECT upvotes, downvotes from comments")
+        redirect "/topic/#{@id}"
         
-        erb :topic
       end
 
       get "/signup" do
